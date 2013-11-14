@@ -1,0 +1,26 @@
+#!/bin/bash
+
+output=""
+
+while read line           
+do
+    check=`curl -s -D - $line --head -o /dev/null`
+    
+    if [ $? == "0" ]; then
+
+        match=`grep "HTTP/... [45]0[0-9]" <<< "$check"`
+
+        if [ $? == "0" ]; then
+            output="$output\nHouve problema com $line, erro $match"
+        else
+            output="$output\n$line esta ok"
+        fi
+
+    else
+        output="$output\nNao pude conectar em $line"
+    fi
+
+done < /home/gutierri/devel/monitoramento-web/sites.txt
+
+echo -e $output | mail -s 'Relatorio dos sites' equipe@listas.hacklab.com.br 2> /tmp/mailerror
+
