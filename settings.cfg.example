@@ -1,3 +1,4 @@
 team_mail='yourteam@list.com'
 admin_mail='admin@email.com'
+sites_file='/path/to/sites.txt'
 
